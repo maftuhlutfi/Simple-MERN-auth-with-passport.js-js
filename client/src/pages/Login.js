@@ -4,9 +4,12 @@ import Input from '../components/Input';
 import Button from '../components/ButtonWithSpinner';
 import ErrMsg from '../components/ErrMsg';
 
-import axios from 'axios';
+import { signInStart } from '../redux/actions/userActions';
+import { useDispatch } from 'react-redux';
 
 function Login(props) {
+	const dispatch = useDispatch();
+
 	const [isLoading, setIsLoading] = useState(false);
 	const [input, setInput] = useState({ username: '', password: '' });
 	const [errMsg, setErrMsg] = useState('');
@@ -23,23 +26,7 @@ function Login(props) {
 	const handleClick = e => {
 		setErrMsg('');
 		setIsLoading(true);
-		axios({
-			method: "POST",
-			data: {
-				username,
-				password
-			},
-			withCredentials: true,
-			url: "http://localhost:4000/login",
-		})
-		.then(res => {
-			setIsLoading(false);
-			console.log(res)
-		})
-		.catch(err => {
-			setIsLoading(false);
-			setErrMsg('Username or password is incorrect.');
-		});
+		dispatch(signInStart(input));
 	}
 
 	const handleChange = e => {

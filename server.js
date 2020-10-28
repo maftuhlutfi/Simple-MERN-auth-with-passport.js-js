@@ -67,11 +67,14 @@ app.post('/login', (req, res) => {
 
 	req.login(user, err => {
 		if (err) {
-			res.status(401).send({err: "User not found."})
 			throw err;
 		} else {
-			passport.authenticate("local")(req, res, () => {
-				res.status(200).send({ msg: "Successfully login." })
+			passport.authenticate("local")(req, res, (err, user, info) => {
+				if (!err) {
+					res.status(200).send({ success: true, msg: "Successfully login.", user })
+				} else {
+					res.status(200).send({ success: false, msg: "User not found." })
+				}
 			});
 		}
 	})
