@@ -5,32 +5,29 @@ import Button from '../components/ButtonWithSpinner';
 import ErrMsg from '../components/ErrMsg';
 
 import { signInStart } from '../redux/actions/userActions';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { selectIsLoading, selectErrMsg } from '../redux/selectors/userSelector';
 
 function Login(props) {
 	const dispatch = useDispatch();
+	const isLoading = useSelector(state => selectIsLoading(state));
+	let errMsg = useSelector(state => selectErrMsg(state))
 
-	const [isLoading, setIsLoading] = useState(false);
 	const [input, setInput] = useState({ username: '', password: '' });
-	const [errMsg, setErrMsg] = useState('');
 	const { username, password } = input;
 
 	useEffect(() => {
 		document.title = 'Login';
 	})
 
-	useEffect(() => {
-		setErrMsg('');
-	}, [input])
-
 	const handleClick = e => {
-		setErrMsg('');
-		setIsLoading(true);
 		dispatch(signInStart(input));
 	}
 
 	const handleChange = e => {
 		const { name, value } = e.target;
+		errMsg = '';
 
 		setInput(prev => {
 			return {
@@ -48,7 +45,7 @@ function Login(props) {
 			{
 				errMsg ? <ErrMsg text={errMsg} /> : ''
 			}
-			<Button handleClick={handleClick} />
+			<Button handleClick={handleClick} isLoading={isLoading} />
 		</div>
 	);
 }

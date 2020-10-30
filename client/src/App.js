@@ -1,18 +1,30 @@
+import { useEffect } from 'react';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import './App.css';
 
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { checkUserSession } from './redux/actions/userActions';
+import { selectCurrentUser } from './redux/selectors/userSelector';
 
 function App() {
+  const dispatch = useDispatch();
+  const currentUser = useSelector(state => selectCurrentUser(state));
+
+  useEffect(() => {
+    dispatch(checkUserSession())
+  }, [])
+
   return (
     <Router>
       <div className="App">
         <Switch>
-          <Route path='/login' exact render={() => <Login />} />
-          <Route path='/register' exact render={() => <Register />} />
-          <Route path='/dashboard' exact render={() => <Dashboard />} />
+          <Route path='/login' exact render={() => currentUser ? (<Redirect to='/dashboard' />) : <Login />} />
+          <Route path='/register' exact render={() => currentUser ? (<Redirect to='/dashboard' />) : <Register />} />
+          <Route path='/dashboard' exact render={() => currentUser ? <Dashboard /> : <Login />} />
         </Switch>
       </div>
     </Router>

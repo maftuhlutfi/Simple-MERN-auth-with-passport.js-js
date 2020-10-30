@@ -56,7 +56,7 @@ passport.deserializeUser(function(id, done) {
 });
 
 // ------------------ ROUTES -------------------
-app.post('/login', (req, res) => {
+/*app.post('/login', (req, res) => {
 	const { username, password } = req.body;
 	const user = new User({
 		username,
@@ -78,7 +78,24 @@ app.post('/login', (req, res) => {
 			});
 		}
 	})
-})
+})*/
+
+app.post("/login", (req, res, next) => {
+	passport.authenticate("local", (err, user, info) => {
+		if (err) {
+			throw err;
+		}
+		if (!user) {
+			res.status(401).send(info);
+		}
+		else {
+			req.logIn(user, (err) => {
+				if (err) throw err;
+				res.redirect('/user');
+			});
+		}
+	})(req, res, next);
+});
 
 app.post("/register", (req, res, next) => {
 	const { username, password } = req.body;

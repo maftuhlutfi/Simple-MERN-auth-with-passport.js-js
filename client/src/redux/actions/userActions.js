@@ -25,3 +25,7 @@ export const signOutFailure = errorMessage => ({
 	type: 'SIGN_OUT_FAILURE',
 	payload: errorMessage
 })
+
+export const checkUserSession = () => ({
+	type: 'CHECK_USER_SESSION'
+})
