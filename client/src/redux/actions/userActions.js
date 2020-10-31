@@ -26,6 +26,21 @@ export const signOutFailure = errorMessage => ({
 	payload: errorMessage
 })
 
+export const signUpStart = userData => ({
+	type: 'SIGN_UP_START',
+	payload: userData
+})
+
+export const signUpSuccess = user => ({
+	type: 'SIGN_UP_SUCCESS',
+	payload: user
+})
+
+export const signUpFailure = errorMessage => ({
+	type: 'SIGN_UP_FAILURE',
+	payload: errorMessage
+})
+
 export const checkUserSession = () => ({
 	type: 'CHECK_USER_SESSION'
 })

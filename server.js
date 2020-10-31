@@ -102,6 +102,7 @@ app.post("/register", (req, res, next) => {
 
 	User.register({username}, password, (err, user) => {
 		if (err) {
+			console.log(err);
 			res.status(400).send(err);
 		} else {
 			passport.authenticate("local")(req, res, () => {
@@ -112,7 +113,6 @@ app.post("/register", (req, res, next) => {
 })
 
 app.get("/user", (req, res) => {
-	console.log(req.user);
 	res.send(req.user); // The req.user stores the entire user that has been authenticated inside of it.
 });
 

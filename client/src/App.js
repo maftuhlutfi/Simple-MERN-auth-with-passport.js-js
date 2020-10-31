@@ -16,15 +16,32 @@ function App() {
 
   useEffect(() => {
     dispatch(checkUserSession())
-  }, [])
+  }, [dispatch])
 
   return (
     <Router>
       <div className="App">
         <Switch>
-          <Route path='/login' exact render={() => currentUser ? (<Redirect to='/dashboard' />) : <Login />} />
-          <Route path='/register' exact render={() => currentUser ? (<Redirect to='/dashboard' />) : <Register />} />
-          <Route path='/dashboard' exact render={() => currentUser ? <Dashboard /> : <Login />} />
+          <Route
+            path='/'
+            exact
+            render={() => currentUser ? <Redirect to='/dashboard' /> : <Redirect to='/login' />}
+          />
+          <Route 
+            path='/login' 
+            exact 
+            render={() => currentUser ? (<Redirect to='/dashboard' />) : <Login />} 
+          />
+          <Route 
+            path='/register' 
+            exact 
+            render={() => currentUser ? (<Redirect to='/dashboard' />) : <Register />} 
+          />
+          <Route 
+            path='/dashboard' 
+            exact 
+            render={() => currentUser ? <Dashboard /> : <Redirect to='/login' />} 
+          />
         </Switch>
       </div>
     </Router>
