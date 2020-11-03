@@ -7,7 +7,9 @@ import {
 	signOutSuccess,
 	signOutFailure,
 	signUpSuccess,
-	signUpFailure
+	signUpFailure,
+	changePasswordSuccess,
+	changePasswordFailure
 } from '../actions/userActions';
 
 function signInApi(username, password) {
@@ -61,6 +63,40 @@ function getCurrentUser() {
 		});
 }
 
+function changePasswordApi(user, oldPassword, newPassword) {
+	return axios({
+			method: "POST",
+			data: {
+				user,
+				oldPassword,
+				newPassword
+			},
+			withCredentials: true,
+			url: "http://localhost:4000/change-password",
+		})
+		.then(res => {
+			return res.data
+		})
+		.catch(err => {
+			throw new Error('Old password is wrong.');
+		});
+}
+
+function signOutApi() {
+	return 	axios({
+				method: "GET",
+				withCredentials: true,
+				url: "http://localhost:4000/logout"
+			})
+			.then(res => {
+				console.log(res);
+				return res.data
+			})
+			.catch(err => {
+				throw new Error("Cannot logged out.");
+			});
+}
+
 export function* signIn({payload: {username, password}}) {
 	try {
 		const user = yield call(signInApi, username, password);
@@ -88,6 +124,25 @@ export function* isUserLoggedIn() {
 	}
 }
 
+export function* changePassword({payload: {user, oldPassword, newPassword}}) {
+	try {
+		const successMsg = yield call(changePasswordApi, user, oldPassword, newPassword);
+		yield put(changePasswordSuccess(successMsg));
+	} catch (err) {
+		yield put(changePasswordFailure(err.message));
+	}
+}
+
+export function* signOut() {
+	try {
+		const successMsg = yield call(signOutApi);
+		console.log(successMsg);
+		yield put(signOutSuccess(successMsg));
+	} catch(err) {
+		yield put(signOutFailure(err.message));
+	}
+}
+
 export function* onSignInStart() {
 	yield takeLatest('SIGN_IN_START', signIn)
 }
@@ -100,10 +155,19 @@ export function* onCheckUserSession() {
 	yield takeLatest('CHECK_USER_SESSION', isUserLoggedIn)
 }
 
+export function* onChangePasswordStart() {
+	yield takeLatest('CHANGE_PASSWORD_START', changePassword)
+}
+
+export function* onSignOutStart() {
+	yield takeLatest('SIGN_OUT_START', signOut)
+}
 export function* userSagas() {
 	yield all([
 		call(onSignInStart),
 		call(onSignUpStart),
-		call(onCheckUserSession)
+		call(onCheckUserSession),
+		call(onChangePasswordStart),
+		call(onSignOutStart)
 	])
 }

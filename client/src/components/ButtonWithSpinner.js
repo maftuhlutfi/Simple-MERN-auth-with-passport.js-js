@@ -2,10 +2,10 @@ import React from 'react';
 import './ButtonWithSpinner.css'
 import Spinner from './Spinner';
 
-function ButtonWithSpinner({ handleClick, isLoading }) {
+function ButtonWithSpinner({ handleClick, isLoading, label }) {
 	return (
 		<button onClick={handleClick}>
-			{isLoading ? <Spinner /> : '→'}
+			{isLoading ? <Spinner /> : label || '→'}
 		</button>
 	);
 }

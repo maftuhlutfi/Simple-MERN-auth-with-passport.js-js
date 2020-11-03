@@ -17,8 +17,9 @@ export const signOutStart = () => ({
 	type: 'SIGN_OUT_START'
 })
 
-export const signOutSuccess = () => ({
-	type: 'SIGN_OUT_SUCCESS'
+export const signOutSuccess = successMessage => ({
+	type: 'SIGN_OUT_SUCCESS',
+	payload: successMessage
 })
 
 export const signOutFailure = errorMessage => ({
@@ -43,4 +44,19 @@ export const signUpFailure = errorMessage => ({
 
 export const checkUserSession = () => ({
 	type: 'CHECK_USER_SESSION'
+})
+
+export const changePasswordStart = userAndPasswords => ({
+	type: 'CHANGE_PASSWORD_START',
+	payload: userAndPasswords
+})
+
+export const changePasswordSuccess = successMessage => ({
+	type: 'CHANGE_PASSWORD_SUCCESS',
+	payload: successMessage
+})
+
+export const changePasswordFailure = errorMessage => ({
+	type: 'CHANGE_PASSWORD_FAILURE',
+	payload: errorMessage
 })

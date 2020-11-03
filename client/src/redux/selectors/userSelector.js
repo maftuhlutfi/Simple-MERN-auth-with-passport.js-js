@@ -16,3 +16,8 @@ export const selectErrMsg = createSelector(
 	[selectUser],
 	user => user.errMsg
 )
+
+export const selectSuccessMsg = createSelector(
+	[selectUser],
+	user => user.successMsg
+)

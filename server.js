@@ -112,6 +112,29 @@ app.post("/register", (req, res, next) => {
 	})
 })
 
+app.post('/change-password', (req, res) => {
+	const { user, oldPassword, newPassword } = req.body;
+	User.findOne(user, (err, foundUser) => {
+		if(foundUser) {
+			foundUser.changePassword(oldPassword, newPassword, err => {
+				if (err) {
+					res.status(400).send(err);
+				} else {
+					req.logout();
+					res.status(200).send('Password successfully changed.');
+				}
+			})
+		} else {
+			res.status(401).send('You are not able to change password')
+		}
+	})
+})
+
+app.get('/logout', (req, res) => {
+	req.logout();
+	res.status(200).send('Successfully logged out.');
+})
+
 app.get("/user", (req, res) => {
 	res.send(req.user); // The req.user stores the entire user that has been authenticated inside of it.
 });
